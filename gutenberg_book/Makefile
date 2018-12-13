@@ -3,8 +3,9 @@ BOOKS=alice christmas_carol dracula frankenstein heart_of_darkness life_of_bee m
 
 FREQLISTS=$(BOOKS:%=results/%.freq.txt)
 SENTEDBOOKS=$(BOOKS:%=results/%.sent.txt)
+PARSEDBOOKS=$(BOOKS:%=results/%.parsed.txt)
 
-all: $(FREQLISTS) $(SENTEDBOOKS)
+all: $(FREQLISTS) $(SENTEDBOOKS) $(PARSEDBOOKS)
 
 
 clean:
@@ -12,6 +13,9 @@ clean:
 
 %.no_md.txt: %.txt
 	python3 src/remove_gutenberg_metadata.py $< $@
+
+results/%.parsed.txt: results/%.sent.txt
+	python3 src/parse.py $< $@
 
 results/%.freq.txt: data/%.no_md.txt
 	src/freqlist.sh $< $@
